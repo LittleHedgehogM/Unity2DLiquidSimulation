@@ -37,7 +37,7 @@ public class PlayerStatus : MonoBehaviour
         myAnimator.SetFloat("Speed", myMovement.sqrMagnitude);
         myAnimator.SetFloat("MovementX", myMovement.x);
         myAnimator.SetInteger("Form", (int)myStatus);
-
+        Debug.Log((int)myStatus + ", " + myMovement);
     }
 
     public void ResetValue()
