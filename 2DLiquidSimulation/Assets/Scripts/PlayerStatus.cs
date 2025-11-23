@@ -2,48 +2,76 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[System.Serializable]
 public enum Status 
 {
-    Small,
-    MediumLight,
-    MediumDark,
-    LargeLight,
-    LargeDark
+    Small = 1,
+    MediumLight = 2,
+    MediumDark = 3,
+    LargeLight = 4,
+    LargeDark = 5
 }
 
 public class PlayerStatus : MonoBehaviour
 {
 
     private Animator myAnimator;
+    private Navigate myNavigation;
     private Status myStatus;
-    private int Darkness;
+    private int currentValue;
     public ScoreConfigure myScoreConfig;
-    
-    void Start()
+    private Vector2 myMovement = Vector2.zero;
+
+    void Awake()
     {
         myStatus = Status.Small;
-        Darkness = myScoreConfig.startScore;
+        currentValue = myScoreConfig.startScore;
+        myAnimator = GetComponent<Animator>();
+        myNavigation = GetComponent<Navigate>();
+    }
+
+    private void Update()
+    {
+        
+        myMovement = myNavigation.getMovementVector();
+        myAnimator.SetFloat("Speed", myMovement.sqrMagnitude);
+        myAnimator.SetFloat("MovementX", myMovement.x);
+        myAnimator.SetInteger("Form", (int)myStatus);
+
+    }
+
+    public void ResetValue()
+    {
+        currentValue = myScoreConfig.startScore;
+
+    }
+
+    public float getValue()
+    {
+        
+        float value = currentValue * 1.0f/ myScoreConfig.maxScore;
+        Debug.Log(currentValue +  "/"+ myScoreConfig.maxScore + ", " + value);
+        return value;
     }
 
     public void IncreaseDarknessByInteraction() 
     {
-        Darkness += myScoreConfig.interactScore;
+        currentValue += myScoreConfig.interactScore;
     }
 
     public void DecreaseDarknessByInteraction() 
     {
-        Darkness -= myScoreConfig.interactScore;
+        currentValue -= myScoreConfig.interactScore;
     }
 
     public void IncreaseDarknessByQuestion()
     {
-        Darkness += myScoreConfig.questionScore;
+        currentValue += myScoreConfig.questionScore;
     }
 
     public void DecreaseDarknessByQuestion()
     {
-        Darkness -= myScoreConfig.questionScore;
+        currentValue -= myScoreConfig.questionScore;
     }
 
     public Status checkStatus() 

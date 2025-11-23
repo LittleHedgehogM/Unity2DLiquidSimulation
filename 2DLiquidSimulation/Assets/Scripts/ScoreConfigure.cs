@@ -7,18 +7,18 @@ using UnityEngine;
 public class ScoreConfigure : ScriptableObject
 {
 
-    [Header("³õÊ¼µÃ·Ö")]
+    [Header("ï¿½ï¿½Ê¼ï¿½Ã·ï¿½")]
     public int startScore;
 
-    [Header("×îµÍ")]
+    [Header("ï¿½ï¿½ï¿½")]
     public int minScore;
 
-    [Header("×î¸ß")]
+    [Header("ï¿½ï¿½ï¿½")]
     public int maxScore;
 
-    [Header("ÎÊ´ðµÃ·Ö")]
+    [Header("ï¿½Ê´ï¿½Ã·ï¿½")]
     public int questionScore;
 
-    [Header("»¥¶¯µÃ·Ö")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½")]
     public int interactScore;
 }
