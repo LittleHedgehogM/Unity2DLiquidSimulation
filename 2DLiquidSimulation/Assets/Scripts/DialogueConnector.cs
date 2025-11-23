@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Yarn.Unity;
 public class DialogueConnector : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private PlayerStatus myPlayerStatus;
+
     void Start()
     {
-        
+        myPlayerStatus = FindObjectOfType<PlayerStatus>();
     }
 
-    // Update is called once per frame
-    void Update()
+    [YarnCommand("IncreaseScore")]
+    public void IncreaseScore()
     {
-        
+        myPlayerStatus.IncreaseDarknessByInteraction();
     }
+
+    [YarnCommand("DecreaseScore")]
+    public void DecreaseScore()
+    {
+        myPlayerStatus.DecreaseDarknessByInteraction();
+    }
+
+
 }
