@@ -8,6 +8,10 @@ public class UIControl : MonoBehaviour
     private PlayerStatus myPlayerStatus;
     public Slider mySlider;
 
+    [Header("UI Animation")]
+    public float transitionTime;
+    
+
     void Start()
     {
         mySceneManagement = FindObjectOfType<SceneUnlockManagement>();
@@ -52,5 +56,9 @@ public class UIControl : MonoBehaviour
 
     }
 
+    public void UpdateValue()
+    {
+        
+    }
 
 }
