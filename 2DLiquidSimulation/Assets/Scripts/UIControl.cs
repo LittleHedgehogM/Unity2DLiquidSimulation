@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class UIControl : MonoBehaviour
     public Slider mySlider;
 
     [Header("UI Animation")]
-    public float transitionTime;
+    public float transitionTime = 0.5f;
     
 
     void Start()
@@ -35,6 +36,23 @@ public class UIControl : MonoBehaviour
         mySceneManagement.GoNextScene();
     }
 
+    private void OnEnable()
+    {
+        PlayerStatus.ValueChange += UpdateUIValue;
+    }
+
+    private void OnDisable()
+    {
+        PlayerStatus.ValueChange -= UpdateUIValue;
+    }
+
+    public void UpdateUIValue(float targetValue)
+    {
+        DOTween.Sequence()
+        .Append(mySlider.DOValue(targetValue, transitionTime))
+        .WaitForCompletion();
+    }
+
     public void DisableGoLeft()
     {
 
@@ -56,9 +74,5 @@ public class UIControl : MonoBehaviour
 
     }
 
-    public void UpdateValue()
-    {
-        
-    }
 
 }

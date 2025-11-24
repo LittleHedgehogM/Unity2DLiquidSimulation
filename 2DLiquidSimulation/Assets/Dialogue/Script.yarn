@@ -4,9 +4,11 @@ tags:
 
 Will you share the conch?
   -> Yes
-    Let others hear it.
+		<<IncreaseScore Player>>
+		Let others hear it.
   -> No
-    Keep it for myself.
+		<<DecreaseScore Player>>
+		Keep it for myself.
 ===
 
 title:  树叶
@@ -14,9 +16,11 @@ tags:
 ---
 Will you give the leaf cuttings?
   -> Yes
-    Help others grow plants.
+		<<IncreaseScore Player>>
+		Help others grow plants.
   -> No
-    Save for my garden.
+		<<DecreaseScore Player>>
+		Save for my garden.
 ===
 
 title:  蝴蝶
@@ -24,9 +28,11 @@ tags:
 ---
 Will you guide butterflies to others?
   -> Yes
-    Let neighbors enjoy them.
+		<<IncreaseScore Player>>
+		Let neighbors enjoy them.
   -> No
-    Keep them in my yard.
+		<<DecreaseScore Player>>
+		Keep them in my yard.
 ===
 
 title:  云朵
@@ -34,9 +40,11 @@ tags:
 ---
 Will you let clouds rain on others’ fields?
   -> Yes
-    Help their crops thrive.
+    	<<IncreaseScore Player>>
+    	Help their crops thrive.
   -> No
-    Save rain for my land.
+    	<<DecreaseScore Player>>
+    	Save rain for my land.
 ===
 
 title:  夜明珠
@@ -44,7 +52,9 @@ tags:
 ---
 Will you lend the night pearl?
   -> Yes
-    Let others see its glow.
+		<<IncreaseScore Player>>
+		Let others see its glow.
   -> No
-    Only I can own it.
+		<<DecreaseScore Player>>
+		Only I can own it.
 ===

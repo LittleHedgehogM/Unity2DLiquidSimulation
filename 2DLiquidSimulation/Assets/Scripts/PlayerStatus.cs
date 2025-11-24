@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [System.Serializable]
@@ -17,14 +16,15 @@ public class PlayerStatus : MonoBehaviour
 
     private Animator myAnimator;
     private Navigate myNavigation;
-    private Status myStatus;
+    public Status myStatus;
     private int currentValue;
     public ScoreConfigure myScoreConfig;
     private Vector2 myMovement = Vector2.zero;
+    public static Action<float> ValueChange;
 
     void Awake()
     {
-        myStatus = Status.Small;
+        //myStatus = Status.MediumLight;
         currentValue = myScoreConfig.startScore;
         myAnimator = GetComponent<Animator>();
         myNavigation = GetComponent<Navigate>();
@@ -37,7 +37,7 @@ public class PlayerStatus : MonoBehaviour
         myAnimator.SetFloat("Speed", myMovement.sqrMagnitude);
         myAnimator.SetFloat("MovementX", myMovement.x);
         myAnimator.SetInteger("Form", (int)myStatus);
-        Debug.Log((int)myStatus + ", " + myMovement);
+        // Debug.Log((int)myStatus + ", " + myMovement);
     }
 
     public void ResetValue()
@@ -57,21 +57,27 @@ public class PlayerStatus : MonoBehaviour
     public void IncreaseDarknessByInteraction() 
     {
         currentValue += myScoreConfig.interactScore;
+        ValueChange?.Invoke(getValue());
+
     }
 
     public void DecreaseDarknessByInteraction() 
     {
         currentValue -= myScoreConfig.interactScore;
+        ValueChange?.Invoke(getValue());
+
     }
 
     public void IncreaseDarknessByQuestion()
     {
         currentValue += myScoreConfig.questionScore;
+        ValueChange?.Invoke(getValue());
     }
 
     public void DecreaseDarknessByQuestion()
     {
         currentValue -= myScoreConfig.questionScore;
+        ValueChange?.Invoke(getValue());
     }
 
     public Status checkStatus() 

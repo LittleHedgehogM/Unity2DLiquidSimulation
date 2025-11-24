@@ -18,12 +18,28 @@ public class Navigate : MonoBehaviour
     void Update()
     {
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
         if (Input.GetMouseButtonUp(0))
         {
+            
+
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos, Vector2.zero);
+
+            foreach (var hit in hits)
+            {
+                if (hit.collider.CompareTag("Item"))
+                {
+                    Debug.Log("点到物品：" + hit.collider.name);
+                    hit.collider.gameObject.GetComponent<ClickItem>().ClickOnItem();
+                    return;
+                }
+            }
+
             var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             target.z = 0;
             agent.destination = target;
-            
+
         }
     }
 

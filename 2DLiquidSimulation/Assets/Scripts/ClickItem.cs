@@ -10,9 +10,9 @@ public class ClickItem : MonoBehaviour
     {
         myDialogueRunner = FindObjectOfType<DialogueRunner>();
     }
-    void OnMouseUp()
+    public void ClickOnItem()
     {
-        Debug.Log("OnMouse Up" + NodeName);
+        // Debug.Log("OnMouse Up" + NodeName);
         if (!myDialogueRunner.IsDialogueRunning)
         {
             myDialogueRunner.StartDialogue(NodeName);
