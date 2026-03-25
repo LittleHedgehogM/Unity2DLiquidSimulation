@@ -1,0 +1,387 @@
+﻿title: Start
+tags:
+position: 1,-807
+---
+<<jump Openning>>
+<<declare $affection = 0>>
+<<declare $sacrifice = 0>>
+===
+
+title: Openning
+position: -6,-649
+---
+<<ChangeSceneTo Camera Classroom>>
+<<wait 1>>
+You had been classmates for two years.
+Though only a few rows separated you, yet the distance felt immeasurable.
+After an exam,you were assigned to sit beside her.
+That was when you truly began to know her.
+<<jump InClassroom>>
+===
+
+title: InClassroom
+position: 28,-202
+---
+<<ChangeSceneTo Camera Classroom>>
+<<wait 1>>
+That afternoon, a sudden wave of acute stomach pain hit you without warning.
+It felt as though someone were twisting your insides over and over again; 
+You told yourself that if you stayed quiet and endured it, it would eventually pass.
+Then she leaned closer.
+<<Act Girl GirlSad_0 0.5 0.3 white 0.6>>
+Girl: You look pale. Are you feeling sick?
+<<HideAll>>
+<<Act Boy BoySad_0 0.5 0.3 white 0.6>>
+Boy: It's nothing… probably just something I ate.
+<<HideAll>>
+<<Act Girl GirlSad_0 0.5 0.3 white 0.6>>
+Girl: That's not “nothing.” Wait here—I'll get you some medicine.
+<<HideAll>>
+<<Act Boy BoySad_0 0.5 0.3 white 0.6>>
+Boy: You really don't have to…
+<<HideAll>>
+<<wait 1>>
+(A few moments later.)
+
+<<Act Medicine medicine 0.5 0.5 white 0.3>>
+<<wait 1>>
+<<HideAll>>
+<<wait 0.5>>
+<<Act Girl GirlNormal_0 0.5 0.3 white 0.6>>
+Girl: Here. The medicine and some water. Drink slowly.
+<<HideAll>>
+<<Act Boy boyNormal_0 0.5 0.3 white 0.6>>
+Boy: …Thank you.
+<<HideAll>>
+<<Act Girl GirlNormal_0 0.5 0.3 white 0.6>>
+Girl: If it still hurts, tell the teacher. I'll walk you to the infirmary.
+<<HideAll>>
+<<Act Boy boyNormal_0 0.5 0.3 white 0.6>>
+Boy: It's okay. I'm better now.
+<<HideAll>>
+<<Act Girl GirlSad_0 0.5 0.3 white 0.6>>
+Girl: You always pretend you're fine.
+<<HideAll>>
+<<Act Boy BoySad_0 0.5 0.3 white 0.6>>
+Boy: …Yeah.
+<<HideAll>>
+
+You held onto that moment quietly.
+So this was what it felt like to be noticed.
+And from that day on, she was no longer just another classmate in your life.
+<<jump Breakfast>>
+===
+
+title: Breakfast
+position: 20,-509
+color: red
+---
+<<wait 1>>
+You happened to learn that she often skipped breakfast.
+After thinking about it for a while, you decided to—
+-> Share your breakfast with her
+    <<Act Bread breakfirst 0.5 0.5 white 0.3>>
+    <<wait 1>>
+    <<HideAll>>
+    <<Act Girl GirlHappy_0 0.5 0.3 white 0.6>>
+    Girl: Oh? Aren't you going to eat?
+    <<HideAll>>
+    <<Act Boy boyNormal_0 0.5 0.3 white 0.6>>
+    Boy: I'm not really in the mood for something sweet today.
+    Girl: Then I'll help you finish it.
+    Boy: …Yeah.
+    You watch her take the first bite.
+    For some reason, it feels more satisfying than eating it yourself.
+    <<set $affection += 1>>
+-> Buy an extra for her
+    <<Act Bread breakfirst 0.5 0.5 white 0.3>>
+    <<wait 1>>
+    <<HideAll>>
+    <<Act Boy boyNormal_0 0.5 0.3 white 0.6>>
+    Boy: I… picked up an extra one on the way. Do you want it?
+    <<HideAll>>
+    <<Act Girl GirlHappy_0 0.5 0.3 white 0.6>>
+    Girl: For me?
+    <<HideAll>>
+    <<Act Boy boyShy_0 0.5 0.3 white 0.6>>
+    Boy: Yeah. It'd go to waste otherwise.
+    <<HideAll>>
+    <<Act Girl GirlShy_0 0.5 0.3 white 0.6>>
+    Girl: Thank you. You're really sweet.
+    <<HideAll>>
+    <<set $affection += 1>>
+    <<set $sacrifice += 1>>
+-> Remind her to eat breakfast
+    Boy: Do you skip breakfast every day? That's really not good for you.
+    Girl: Yeah… I'll try to be more careful. Thanks.
+    She smiles politely.
+<<jump SchoolGate_1>>
+===
+
+
+
+title: SchoolGate_1
+position: 20,-376
+---
+
+<<ChangeSceneTo Camera SchoolGate>>
+<<wait 1>>
+<<ShowItem CoupleInFrontOfSchoolGate>>
+<<wait 1.5>>
+Gradually, the distance between you began to fade.
+You shared snacks during breaks, and you walked home together after school.
+What once felt unfamiliar slowly became routine.
+
+<<wait 0.5>>
+<<FadeItem CoupleInFrontOfSchoolGate>>
+<<wait 0.5>>
+Before you knew it, your birthday was approaching.
+One afternoon on the way home, you gathered your courage.
+You decided to ask her out.
+
+<<HideAll>>
+<<Act Boy boyShy_0 0.5 0.3 white 0.6>>
+Boy: My birthday's next week… I was wondering if maybe we could celebrate it together?
+<<HideAll>>
+She looks at you, surprised for a moment, then smiles.
+<<Act Girl GirlHappy_0 0.5 0.3 white 0.6>>
+Girl: Really? Of course!
+<<HideAll>>
+<<Act Girl GirlShy_0 0.5 0.3 white 0.6>>
+Girl: I'd love to celebrate your birthday with you.
+<<HideAll>>
+<<Act Boy boyShy_0 0.5 0.3 white 0.6>>
+Boy: That's… great.
+<<HideAll>>
+<<jump Restaurant>>
+===
+
+title: Restaurant
+position: 23,-35
+---
+<<ChangeSceneTo Camera Restaurant>>
+<<wait 1>>
+You chose an elegant restaurant and arrived early.
+She showed up right on time.
+<<ShowItem CoupleInRest>>
+<<wait 1>>
+The afternoon passed easily.
+Conversation flowing from favorite hobbies to distant dreams.
+After dinner, you hesitated for a moment before asking—
+Where should you go next?
+-> The Shopping District
+    <<jump Shopping>>
+-> Internet Café
+    <<jump InternetCafe>>
+-> Haunted Escape Room
+    <<jump TheEscapeRoom>>
+===
+
+title: TheEscapeRoom
+position: 41,175
+---
+<<ChangeSceneTo Camera EscapeRoom>>
+<<wait 1>>
+The lights dim as you enter the escape room.
+Clues scatter the walls; shadows stretch unnaturally across the floor.
+Just as you're piecing together a solution,
+<<ShowItem Ghost>>
+<<Act Ghost Ghost 0.5 0.3 grey 0.6>>
+a figure in a crimson robe suddenly emerges from the darkness.
+<<wait 1>>
+<<HideAll>>
+<<ShowItem Ghost>>
+<<Act Girl GirlScared2_0 0.5 0.3 white 0.6>>
+Girl: !!!
+She gasps.
+<<wait 0.5>>
+<<HideAll>>
+In that split second, you decide to —
+-> Stand Between Her and the Apparition
+    <<set $affection += 1>>
+    Your body moves before your fear can catch up.
+    <<Act Boy BoyAngry2_0 0.5 0.3 white 0.6>>
+    Boy: Stay behind me.
+    <<HideAll>>
+    <<Act Girl GirlSad2_0 0.5 0.3 white 0.6>>
+    Girl: You're shaking…
+    <<HideAll>>
+    <<Act Boy BoyNormal2_0 0.5 0.3 white 0.6>>
+    Boy: I know. Just don't look at it.
+    <<HideAll>>
+    <<Act Girl GirlSad2_0 0.5 0.3 white 0.6>>
+    Girl: …Okay.
+    <<HideAll>>
+    <<ShowItem CoupleInRoom>>
+    You step in front of her, heart pounding violently in your chest.
+-> Reassure Her It's Only a Game
+    Boy: Don't worry, it's just part of the setup.
+    Girl: I know, but it still scares me…
+-> Escort Her Out of the Room
+    You take her hand and guide her toward the exit.
+    You tell yourself it was the safer choice.
+<<jump SchoolGate_2>>
+===
+
+title: Shopping
+position: -222,175
+---
+<<set $affection += 1>>
+<<set $sacrifice += 1>>
+You've never really enjoyed shopping.
+But she lights up the moment you step into the busy streets, pulling you from store to store.
+Hours pass.
+You find yourself trailing slightly behind, carrying her bags, nodding at things you don't quite understand.
+It's not your idea of fun,
+But watching her smile makes it harder to care.
+<<jump SchoolGate_2>>
+===
+
+title: InternetCafe
+position: 321,168
+---
+You take her to the internet café you frequently go, recommending your favorite game.
+She fumbles awkwardly with the keyboard, trying her best to follow your instructions.
+Girl: This is so hard… I don't even know which key to press.
+Boy: It's okay. Take your time.
+The blue glow of the screen reflects softly on her face.
+You pretend to focus on the game,
+but your eyes keep drifting towards her.
+<<jump SchoolGate_2>>
+===
+
+title: SchoolGate_2
+position: 15,392
+---
+<<ChangeSceneTo Camera SchoolGate>>
+<<wait 1>>
+After spending so much time together, 
+the unspoken feelings between you have grown impossible to ignore.
+You know what remains is a confession.
+What will you do?
+-> Confess During the Class Gathering
+    You decide to confess during the class gathering.
+    You gather your courage and confess.
+    <<Act Boy BoySad_0 0.5 0.3 white 0.6>>
+    Boy: There's something I've been meaning to tell you.
+    Boy: I… really like you. I have for a while now.
+    Boy: I don't know if you feel the same way...
+    <<HideAll>>
+    <<if $affection < 2>>
+        <<jump BadEnding_BadTiming>>
+    <<elseif $sacrifice < 2>>
+        <<HideAll>>
+        <<Act Girl GirlNormal_0 0.5 0.3 white 0.6>>
+        Girl: I thought maybe I was just imagining it.
+        Girl: I don't know when it started, but… being with you feels easy.
+        Girl: So yes. I feel the same way.
+        <<Act Girl GirlShy_0 0.5 0.3 white 0.6>>
+        <<wait 1>>
+        <<HideAll>>
+        <<jump HappyEnding_MutualGrowth>>
+    <<else>>
+        <<jump BadEnding_Sacrifice>>
+    <<endif>>
+-> Confess on the Way Home
+    <<set $affection += 3>>
+    You gather your courage and confess.
+    <<Act Boy BoySad_0 0.5 0.3 white 0.6>>
+    Boy: There's something I've been meaning to tell you.
+    Boy: I… really like you. I have for a while now.
+    Boy: I don't know if you feel the same way...
+    <<HideAll>>
+    <<if $affection < 2>>
+        <<jump BadEnding_BadTiming>>
+    <<elseif $sacrifice < 2>>
+        <<Act Girl GirlNormal_0 0.5 0.3 white 0.6>>
+        Girl: I thought maybe I was just imagining it.
+        Girl: I don't know when it started, but… being with you feels easy.
+        <<Act Girl GirlShy_0 0.5 0.3 white 0.6>>
+        Girl: So yes. I feel the same way.
+        // <<HideAll>>
+        // <<Act Girl GirlShy_0 0.5 0.3 white 0.6>>
+        <<wait 1>>
+        <<Move Girl 0.65 0.3 0.3>>
+        <<Act Boy boyShy_0 -0.5 0.3 white 0.6>>
+        <<Move Boy 0.3 0.3 1>>
+        <<wait 2>>
+        Boy: That's… great.
+        Boy: I'm really happy to hear that.
+        <<wait 2>>
+        <<HideAll>>
+        <<jump HappyEnding_MutualGrowth>>
+    <<else>>
+        <<jump BadEnding_Sacrifice>>
+    <<endif>>
+-> Remain Silent
+    You Never told her how you felt, and you never got the chance to find out if she felt the same way.
+    <<ChangeSceneTo Camera BadEnding>>
+    <<wait 1>>
+    Life moves forward.
+    After graduation, you attend universities in different cities.
+    Messages become occasional.
+    Sometimes, you still think of her.
+    Some stories do not end in heartbreak.
+    They simply fade.
+===
+
+
+title: HappyEnding_MutualGrowth
+position: -186,584
+---
+<<ChangeSceneTo Camera HappyEnding>>
+<<wait 1>>
+She says yes.
+And just like that, you become a couple.
+There are countless good days. 
+But love is not made only of gentle moments.
+Sometimes,arguments arise.
+You have different opinions, different ways of expressing yourselves.
+Conflicts do not disappear.
+But they become conversations instead of cracks.
+You know fighting does not mean the absence of love.
+Your story continues.
+===
+
+title: BadEnding_Sacrifice
+position: 30,578
+---
+<<ChangeSceneTo Camera BadEnding>>
+<<wait 1>>
+She accepts your confession and you become a couple.
+For a while, everything feels bright.
+But the brightness does not last.
+Disagreements grow more frequent.
+And each time, you choose to step back.
+You tell yourself that compromise is what makes relationships endure.
+That sacrifice is proof of love.
+But is it?
+Gradually, she grows used to your silence after arguments,used to waiting for you to give in.
+Love begins to resemble a fragile glass bottle.
+Every unspoken frustration adds another drop of water.
+Until one day, without warning, it cracks.
+You do not know what she truly felt in the end.
+But you once loved her sincerely.
+And perhaps, that has to be enough.
+
+===
+
+title: BadEnding_BadTiming
+position: 266,569
+---
+Girl: Oh…
+She pauses.
+Girl: I care about you a lot too. But I'm not sure if I'm ready for a relationship right now.
+There is hesitation in her eyes.
+After a moment, she says she wants to focus on her studies.
+She hopes you can remain friends.
+<<ChangeSceneTo Camera BadEnding>>
+<<wait 1>>
+Life moves forward.
+After graduation, you attend universities in different cities.
+Messages become occasional.
+Sometimes, you still think of her.
+Some stories do not end in heartbreak.
+They simply fade.
+
+===

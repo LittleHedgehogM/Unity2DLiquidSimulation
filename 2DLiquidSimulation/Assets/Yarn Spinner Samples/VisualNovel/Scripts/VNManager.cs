@@ -12,8 +12,8 @@ namespace Yarn.Unity.Example {
 	/// <summary>
 	/// runs Yarn commands and manages sprites for the Visual Novel example
 	/// </summary>
-    public class VNManager : DialogueViewBase
-    {
+	public class VNManager : DialogueViewBase
+	{
 		[SerializeField] DialogueRunner runner;
 
 		[Header("Assets"), Tooltip("you can manually assign various assets here if you don't want to use /Resources/ folder")]
@@ -25,7 +25,7 @@ namespace Yarn.Unity.Example {
 
 
 		[Header("Sprite UI settings")] // UI tuning variables and references
-		[Tooltip("all sprites will be tinted with this color")] 
+		[Tooltip("all sprites will be tinted with this color")]
 		public Color defaultTint;
 		[Tooltip("when speaking, a sprite will be highlighted by tinting it with this color")]
 		public Color highlightTint;
@@ -44,41 +44,41 @@ namespace Yarn.Unity.Example {
 		// store sprite references for "actors" (characters, etc.)
 		[HideInInspector] public Dictionary<string, VNActor> actors = new Dictionary<string, VNActor>(); // tracks names to sprites
 
-		static Vector2 screenSize = new Vector2( 1280f, 720f); // needed for position calcuations, e.g. what does "left" mean?
+		static Vector2 screenSize = new Vector2(1280f, 720f); // needed for position calcuations, e.g. what does "left" mean?
 
-		void Awake () {
+		void Awake() {
 			// manually add all Yarn command handlers, so that we don't
 			// have to type out game object names in Yarn scripts (also
 			// gives us a performance increase by avoiding GameObject.Find)
-			runner.AddCommandHandler<string>("Scene", DoSceneChange );
-			runner.AddCommandHandler<string,string,string,string,string>("Act", SetActor );
-			runner.AddCommandHandler<string,string,string>("Draw", SetSpriteYarn );
+			runner.AddCommandHandler<string>("Scene", DoSceneChange);
+			runner.AddCommandHandler<string, string, string, string, string, float>("Act", SetActor);
+			runner.AddCommandHandler<string, string, string>("Draw", SetSpriteYarn);
 
-			runner.AddCommandHandler<string>("Hide", HideSprite );
-			runner.AddCommandHandler("HideAll", HideAllSprites );
-			runner.AddCommandHandler("Reset", ResetScene );
+			runner.AddCommandHandler<string>("Hide", HideSprite);
+			runner.AddCommandHandler("HideAll", HideAllSprites);
+			runner.AddCommandHandler("Reset", ResetScene);
 
-			runner.AddCommandHandler<string,string,string,float>("Move", MoveSprite );
-			runner.AddCommandHandler<string,string>("Flip", FlipSprite );
-			runner.AddCommandHandler<string,float>("Shake", ShakeSprite );
+			runner.AddCommandHandler<string, string, string, float>("Move", MoveSprite);
+			runner.AddCommandHandler<string, string>("Flip", FlipSprite);
+			runner.AddCommandHandler<string, float>("Shake", ShakeSprite);
 
-			runner.AddCommandHandler<string,float,string>("PlayAudio", PlayAudio );
-			runner.AddCommandHandler<string>("StopAudio", StopAudio );
-			runner.AddCommandHandler("StopAudioAll", StopAudioAll );
+			runner.AddCommandHandler<string, float, string>("PlayAudio", PlayAudio);
+			runner.AddCommandHandler<string>("StopAudio", StopAudio);
+			runner.AddCommandHandler("StopAudioAll", StopAudioAll);
 
-            runner.AddCommandHandler<string,float,float,float>("Fade", SetFade );
-			runner.AddCommandHandler<float>("FadeIn", SetFadeIn );
-			runner.AddCommandHandler<string,string,float>("CamOffset", SetCameraOffset );
+			runner.AddCommandHandler<string, float, float, float>("Fade", SetFade);
+			runner.AddCommandHandler<float>("FadeIn", SetFadeIn);
+			runner.AddCommandHandler<string, string, float>("CamOffset", SetCameraOffset);
 
 			// adds all Resources to internal lists / one big pile... it
 			// will scan inside all subfolders too! note: but when
 			// referencing sprites in the Yarn script, just use the file
 			// name and omit folder names
-			if ( useResourcesFolders ) {
+			if (useResourcesFolders) {
 				var allSpritesInResources = Resources.LoadAll<Sprite>("");
-				loadSprites.AddRange( allSpritesInResources );
+				loadSprites.AddRange(allSpritesInResources);
 				var allAudioInResources = Resources.LoadAll<AudioClip>("");
-				loadAudio.AddRange( allAudioInResources );
+				loadAudio.AddRange(allAudioInResources);
 			}
 		}
 
@@ -86,109 +86,108 @@ namespace Yarn.Unity.Example {
 
 		/// <summary>changes background image</summary>
 		public void DoSceneChange(string spriteName) {
-			bgImage.sprite = FetchAsset<Sprite>( spriteName );
+			bgImage.sprite = FetchAsset<Sprite>(spriteName);
 		}
 
 		/// <summary>
 		/// SetActor(actorName,spriteName,positionX,positionY,color) main
 		/// function for moving / adjusting characters</summary>
-		public void SetActor(string actorName, string spriteName, string positionX = "", string positionY = "", string colorHex = "" ) {
+		public void SetActor(string actorName, string spriteName, string positionX = "", string positionY = "", string colorHex = "",  float scaleFactor = 1) {
 
 			// have to use SetSprite() because par[2] and par[3] might be
 			// keywords (e.g. "left", "right")
-			var newActor = SetSpriteUnity( spriteName, positionX, positionY );
-
-			// define text label BG color
+			var newActor = SetSpriteUnity(spriteName, positionX, positionY);
+			newActor.rectTransform.localScale *= scaleFactor;
+            // define text label BG color
             var actorColor = Color.black;
-			if (colorHex != string.Empty && ColorUtility.TryParseHtmlString( colorHex, out actorColor ) ==false ) {
+			if (colorHex != string.Empty && ColorUtility.TryParseHtmlString(colorHex, out actorColor) == false) {
 				Debug.LogErrorFormat(this, "VN Manager can't parse [{0}] as an HTML color (e.g. [#FFFFFF] or certain keywords like [white])", colorHex);
 			}
 
 			// if the actor is using a sprite already, then clone any
 			// persisting data, and destroy it (just to be safe)
-			if ( actors.ContainsKey(actorName)) {
+			if (actors.ContainsKey(actorName)) {
 				// if any missing position params, assume the actor
 				// position should stay the same
 				var newPos = newActor.rectTransform.anchoredPosition;
-				if ( positionX == string.Empty && positionY == string.Empty ) { // missing 2 params, override both x and y
+				if (positionX == string.Empty && positionY == string.Empty) { // missing 2 params, override both x and y
 					newPos = actors[actorName].rectTransform.anchoredPosition;
-				} else if ( positionY == string.Empty ) { // missing 1 param, override y
+				} else if (positionY == string.Empty) { // missing 1 param, override y
 					newPos.y = actors[actorName].rectTransform.anchoredPosition.y;
 				}
 				// if any missing color params, then assume actor color
 				// should stay the same
-				if ( colorHex == string.Empty ) {
+				if (colorHex == string.Empty) {
 					actorColor = actors[actorName].actorColor;
 				}
 				newActor.rectTransform.anchoredPosition = newPos;
 				// clean-up
-				Destroy( actors[actorName].gameObject );
+				Destroy(actors[actorName].gameObject);
 				actors.Remove(actorName);
 				actors.Remove(actorName);
 			}
-
-			// save actor data
-			actors.Add( actorName, new VNActor( newActor, actorColor) );
+            // save actor data
+            actors.Add(actorName, new VNActor(newActor, actorColor));
 		}
 
 		///<summary> Draw(spriteName,positionX,positionY) generic function
 		///for sprite drawing</summary>
 		public void SetSpriteYarn(string spriteName, string positionX = "", string positionY = "") {
-			SetSpriteUnity( spriteName, positionX, positionY );
+			SetSpriteUnity(spriteName, positionX, positionY);
 		}
 
 		public Image SetSpriteUnity(string spriteName, string positionX = "", string positionY = "") {
-			
+
 			// position sprite
 			var pos = new Vector2(0.5f, 0.5f);
 
-            if (positionX != string.Empty) {
-                pos.x = ConvertCoordinates(positionX);
-            }
-            
-            if (positionY != string.Empty) {
-                pos.y = ConvertCoordinates(positionY);
-            }
-        
+			if (positionX != string.Empty) {
+				pos.x = ConvertCoordinates(positionX);
+			}
+
+			if (positionY != string.Empty) {
+				pos.y = ConvertCoordinates(positionY);
+			}
+
 			// actually instantiate and draw sprite now
-			return SetSpriteActual( spriteName, pos );
+			return SetSpriteActual(spriteName, pos);
 		}
 
 		///<summary>Hide(spriteName). "spriteName" can use wildcards, e.g.
 		///HideSprite(Sally*) will hide both SallyIdle and
 		///Sally_Happy</summary>
 		public void HideSprite(string spriteName) {
-			
+
 			var wildcard = new Wildcard(spriteName);
 
 			// generate lists of things to remove
 
 			var imagesToDestroy = new List<Image>();
 			var actorKeysToRemove = new List<string>();
-			
-			foreach ( var actor in actors ) {
-				if ( wildcard.IsMatch(actor.Key) || wildcard.IsMatch(actor.Value.actorImage.name) ) {
-					actorKeysToRemove.Add( actor.Key );
+
+			foreach (var actor in actors) {
+				if (wildcard.IsMatch(actor.Key) || wildcard.IsMatch(actor.Value.actorImage.name)) {
+					actorKeysToRemove.Add(actor.Key);
 					imagesToDestroy.Add(actor.Value.actorImage);
 				}
 			}
 
-			foreach ( var sprite in sprites ) {
-				if ( wildcard.IsMatch(sprite.name) ) {
+			foreach (var sprite in sprites) {
+				if (wildcard.IsMatch(sprite.name)) {
 					imagesToDestroy.Add(sprite);
 				}
 			}
 
 			// actually remove all the things now, if any
 
-			for( int i=0; i<actorKeysToRemove.Count; i++) {
-				if ( actors.ContainsKey( actorKeysToRemove[i] ) ) { // this should never be false, but let's be safe
-					actors.Remove( actorKeysToRemove[i] );
+			for (int i = 0; i < actorKeysToRemove.Count; i++) {
+				if (actors.ContainsKey(actorKeysToRemove[i])) { // this should never be false, but let's be safe
+					actors.Remove(actorKeysToRemove[i]);
 				}
 			}
 
-			for ( int i=0; i<imagesToDestroy.Count; i++) {
-				if ( imagesToDestroy[i] != null ) { // this should never be false, but let's be safe
+			for (int i = 0; i < imagesToDestroy.Count; i++) {
+				if (imagesToDestroy[i] != null) { // this should never be false, but let's be safe
 					CleanDestroy<Image>(imagesToDestroy[i].gameObject);
 				}
 			}
@@ -197,7 +196,7 @@ namespace Yarn.Unity.Example {
 
 		/// <summary>HideAll doesn't actually use any parameters</summary>
 		public void HideAllSprites() {
-			HideSprite( "*" );
+			HideSprite("*");
 			actors.Clear();
 			sprites.Clear();
 		}
@@ -213,51 +212,51 @@ namespace Yarn.Unity.Example {
 		// screenPosY=0.5, moveTime=1.0>> screenPosX and screenPosY are
 		// normalized screen coordinates (0.0 - 1.0) moveTime is the time
 		// in seconds it will take to reach that position
-		public void MoveSprite(string actorOrSpriteName, string screenPosX="0.5", string screenPosY="0.5", float moveTime = 1) {
-			
-			var image = FindActorOrSprite( actorOrSpriteName );
+		public void MoveSprite(string actorOrSpriteName, string screenPosX = "0.5", string screenPosY = "0.5", float moveTime = 1) {
+
+			var image = FindActorOrSprite(actorOrSpriteName);
 
 			// get new screen position
 			Vector2 newPos = new Vector2(0.5f, 0.5f);
-			if ( screenPosX != string.Empty && screenPosY != string.Empty) {
-				newPos = new Vector2( ConvertCoordinates(screenPosX), ConvertCoordinates(screenPosY) );
-			} else if ( screenPosX != string.Empty ) {
+			if (screenPosX != string.Empty && screenPosY != string.Empty) {
+				newPos = new Vector2(ConvertCoordinates(screenPosX), ConvertCoordinates(screenPosY));
+			} else if (screenPosX != string.Empty) {
 				newPos.x = ConvertCoordinates(screenPosX);
 			}
 
 			// actually do the moving now
-			StartCoroutine( MoveCoroutine( image.GetComponent<RectTransform>(), Vector2.Scale(newPos, screenSize), moveTime) );
+			StartCoroutine(MoveCoroutine(image.GetComponent<RectTransform>(), Vector2.Scale(newPos, screenSize), moveTime));
 		}
 
 		/// <summary>flip a sprite, or force the sprite to face a
 		/// direction< Move(actorOrSpriteName, xDirection=toggle)</sprite>
 		public void FlipSprite(string actorOrSpriteName, string xDirection = "") {
-			
-			var image = FindActorOrSprite( actorOrSpriteName );
+
+			var image = FindActorOrSprite(actorOrSpriteName);
 
 
-            float direction;
+			float direction;
 
-            if (xDirection != string.Empty) {
-                direction = Mathf.Sign(ConvertCoordinates(xDirection) - 0.5f);
-            }
-            else {
-                direction = Mathf.Sign(image.rectTransform.localScale.x) * -1f;
-            }
+			if (xDirection != string.Empty) {
+				direction = Mathf.Sign(ConvertCoordinates(xDirection) - 0.5f);
+			}
+			else {
+				direction = Mathf.Sign(image.rectTransform.localScale.x) * -1f;
+			}
 
-			image.rectTransform.localScale = new Vector3( 
-                direction * Mathf.Abs(image.rectTransform.localScale.x), 
-                image.rectTransform.localScale.y, 
-                image.rectTransform.localScale.z 
-            );
+			image.rectTransform.localScale = new Vector3(
+				direction * Mathf.Abs(image.rectTransform.localScale.x),
+				image.rectTransform.localScale.y,
+				image.rectTransform.localScale.z
+			);
 		}
 
 		/// <summary>Shake(actorName or spriteName, strength=0.5)</summary>
 		public void ShakeSprite(string actorOrSpriteName, float shakeStrength = 0.5f) {
-			
-			var findShakeTarget = FindActorOrSprite( actorOrSpriteName );
-			if ( findShakeTarget != null ) {
-				StartCoroutine( SetShake( findShakeTarget.rectTransform, shakeStrength ) );
+
+			var findShakeTarget = FindActorOrSprite(actorOrSpriteName);
+			if (findShakeTarget != null) {
+				StartCoroutine(SetShake(findShakeTarget.rectTransform, shakeStrength));
 			}
 		}
 
@@ -267,21 +266,21 @@ namespace Yarn.Unity.Example {
 		/// number from 0.0 to 1.0 "loop" is the word "loop" (or "true"),
 		/// which tells the sound to loop over and over</summary>
 		public void PlayAudio(string soundName, float volume = 1, string loop = "") {
-			
+
 			var audioClip = FetchAsset<AudioClip>(soundName);
 			// detect volume setting
-			
-            if ( volume <= 0.01f ) {
-                Debug.LogWarningFormat(this, "VN Manager is playing sound {0} at very low volume ({1}), just so you know", soundName, volume );
-            }
-			
+
+			if (volume <= 0.01f) {
+				Debug.LogWarningFormat(this, "VN Manager is playing sound {0} at very low volume ({1}), just so you know", soundName, volume);
+			}
+
 			// detect loop setting
-			bool shouldLoop = loop.Contains("loop") || loop.Contains("true");			
-			
+			bool shouldLoop = loop.Contains("loop") || loop.Contains("true");
+
 			// instantiate AudioSource and configure it (don't use
 			// AudioSource.PlayOneShot because we also want the option to
 			// use <<StopAudio>> and interrupt it)
-			var newAudioSource = Instantiate<AudioSource>( genericAudioSource, genericAudioSource.transform.parent );
+			var newAudioSource = Instantiate<AudioSource>(genericAudioSource, genericAudioSource.transform.parent);
 			newAudioSource.name = audioClip.name;
 			newAudioSource.clip = audioClip;
 			newAudioSource.volume *= volume;
@@ -290,19 +289,19 @@ namespace Yarn.Unity.Example {
 			sounds.Add(newAudioSource);
 
 			// if it doesn't loop, let's set a max lifetime for this sound
-			if ( shouldLoop == false ) {
-				StartCoroutine( SetDestroyTime( newAudioSource, audioClip.length ) );
+			if (shouldLoop == false) {
+				StartCoroutine(SetDestroyTime(newAudioSource, audioClip.length));
 			}
 		}
 
 		/// <summary>stops sound playback based on sound name, whether it's
 		/// looping or not</summary>
 		public void StopAudio(string soundName) {
-			
+
 			// let's just do this in a sloppy way for now, and also assume
 			// there's only one object like it
 			AudioSource toDestroy = null;
-			foreach ( var audioObject in sounds ) {
+			foreach (var audioObject in sounds) {
 				if (audioObject.name == soundName) {
 					toDestroy = audioObject;
 					break;
@@ -311,10 +310,10 @@ namespace Yarn.Unity.Example {
 
 			// double-check there's any audioSource to destroy tho, because
 			// it might have been destroyed already
-			if ( toDestroy != null ) {
-				CleanDestroy<AudioSource>( toDestroy.gameObject );
+			if (toDestroy != null) {
+				CleanDestroy<AudioSource>(toDestroy.gameObject);
 			} else {
-				Debug.LogWarningFormat(this, "VN Manager tried to <<StopAudio {0}>> but couldn't find any sound \"{0}\" currently playing. Double-check the name, or maybe it already stopped.", soundName );
+				Debug.LogWarningFormat(this, "VN Manager tried to <<StopAudio {0}>> but couldn't find any sound \"{0}\" currently playing. Double-check the name, or maybe it already stopped.", soundName);
 			}
 		}
 
@@ -322,11 +321,11 @@ namespace Yarn.Unity.Example {
 		/// take any parameters</summary>
 		public void StopAudioAll() {
 			var toStop = new List<AudioSource>();
-			foreach (var audioSrc in sounds ) {
-				toStop.Add( audioSrc );
+			foreach (var audioSrc in sounds) {
+				toStop.Add(audioSrc);
 			}
-			foreach ( var stopThis in toStop ) {
-				StopAudio( stopThis.name );
+			foreach (var stopThis in toStop) {
+				StopAudio(stopThis.name);
 			}
 		}
 
@@ -335,33 +334,33 @@ namespace Yarn.Unity.Example {
 		/// )</summary>
 		public void SetFade(string fadeColorHex, float startAlpha = 0, float endAlpha = 1, float fadeTime = 1) {
 			// grab the color
-			
-            if (ColorUtility.TryParseHtmlString( fadeColorHex, out var fadeColor ) == false ) {
-				Debug.LogErrorFormat( this, "VN Manager <<Fade>> couldn't parse [{0}] as an HTML hex color... it should look like [#FFFFFF] or [##FFCC00FF], or a small number of keywords work too, like [black] or [red]", fadeColorHex );
+
+			if (ColorUtility.TryParseHtmlString(fadeColorHex, out var fadeColor) == false) {
+				Debug.LogErrorFormat(this, "VN Manager <<Fade>> couldn't parse [{0}] as an HTML hex color... it should look like [#FFFFFF] or [##FFCC00FF], or a small number of keywords work too, like [black] or [red]", fadeColorHex);
 				fadeColor = Color.magenta;
 			}
 
 			// do the fade
-			StartCoroutine( FadeCoroutine( fadeColor, startAlpha, endAlpha, fadeTime ) );
+			StartCoroutine(FadeCoroutine(fadeColor, startAlpha, endAlpha, fadeTime));
 		}
 
 		/// <summary>convenient for an easy fade in, no matter what the
 		/// previous fade color or alpha was</summary>
 		public void SetFadeIn(float fadeTime = 1) {
-			
+
 			// do the fade in
-			StartCoroutine( FadeCoroutine( fadeBG.color, -1f, 0f, fadeTime ) );
+			StartCoroutine(FadeCoroutine(fadeBG.color, -1f, 0f, fadeTime));
 		}
 
 		/// <summary>pan the camera. Usage: CameraOffset(xPos, yPos,
 		/// moveTime)</summary>
 		/// 0, 0 is center default
 		public void SetCameraOffset(string xPos = "", string yPos = "", float moveTime = 0.25f) {
-			
+
 			Vector2 newOffset = Vector2.zero;
-			if ( xPos != string.Empty && yPos != string.Empty ) {
-				newOffset = new Vector2( ConvertCoordinates(xPos) - 0.5f, ConvertCoordinates(xPos) - 0.5f);
-			} else if ( xPos != string.Empty ) {
+			if (xPos != string.Empty && yPos != string.Empty) {
+				newOffset = new Vector2(ConvertCoordinates(xPos) - 0.5f, ConvertCoordinates(xPos) - 0.5f);
+			} else if (xPos != string.Empty) {
 				newOffset.x = ConvertCoordinates(xPos) - 0.5f;
 			}
 
@@ -369,8 +368,8 @@ namespace Yarn.Unity.Example {
 			// exactly so we do a fake camera scroll by moving the
 			// "Sprites" game object container
 			var parent = genericSprite.transform.parent.GetComponent<RectTransform>();
-			var newPos = Vector2.Scale( new Vector2(0.5f, 0.5f) - newOffset, screenSize );
-			StartCoroutine( MoveCoroutine( parent, newPos, moveTime ) );
+			var newPos = Vector2.Scale(new Vector2(0.5f, 0.5f) - newOffset, screenSize);
+			StartCoroutine(MoveCoroutine(parent, newPos, moveTime));
 		}
 
         #endregion
@@ -384,8 +383,8 @@ namespace Yarn.Unity.Example {
             var actorName = dialogueLine.CharacterName;
 
             if (string.IsNullOrEmpty(actorName) == false && actors.ContainsKey(actorName)) {
-                HighlightSprite(actors[actorName].actorImage);
-				nameplateBG.color = actors[actorName].actorColor;
+                // HighlightSprite(actors[actorName].actorImage);
+				// nameplateBG.color = actors[actorName].actorColor;
                 nameplateBG.gameObject.SetActive(true);
             } else {
                 nameplateBG.gameObject.SetActive(false);
