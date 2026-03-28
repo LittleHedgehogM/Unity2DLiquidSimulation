@@ -55,7 +55,7 @@ PaparRoot
 |- Main Camera
 |- Runtime
 |  |- LayoutRoot
-|  |- PreviewRoot
+|  |- PreviewRoot  
 |  |- InteractionRoot
 |- UI
 |  |- HUDCanvas
