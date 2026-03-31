@@ -48,3 +48,12 @@ TagManager:
   - name: Player
     uniqueID: 3466750649
     locked: 0
+  - name: BoxBack
+    uniqueID: 2386287695
+    locked: 0
+  - name: Pet
+    uniqueID: 592989635
+    locked: 0
+  - name: BoxFront
+    uniqueID: 2578068625
+    locked: 0
